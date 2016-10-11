@@ -12,7 +12,6 @@ import com.snail.labaffinity.service.BackGroundService;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +39,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startNextActivity() {
-        Observable
     }
 }
