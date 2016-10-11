@@ -1,0 +1,23 @@
+package com.snail.labaffinity.app;
+
+import android.app.Application;
+
+/**
+ * Author: hzlishang
+ * Data: 16/10/11 下午12:44
+ * Des:
+ * version:
+ */
+public class LabApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sApplication = this;
+    }
+
+    private static Application sApplication;
+
+    public static Application getContext() {
+        return sApplication;
+    }
+}
