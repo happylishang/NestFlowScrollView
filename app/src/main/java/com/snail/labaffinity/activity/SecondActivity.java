@@ -13,7 +13,7 @@ import cn.campusapp.router.annotation.RouterMap;
  * version:
  */
 
-@RouterMap("activity://second")
+@RouterMap({"activity://second"})
 public class SecondActivity extends BaseActivity {
 
     @Override
