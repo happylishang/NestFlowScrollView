@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,8 +13,9 @@ import com.snail.labaffinity.R;
 import com.snail.labaffinity.service.BackGroundService;
 import com.snail.labaffinity.utils.ToastUtil;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.campusapp.router.Router;
+import cn.campusapp.router.route.ActivityRoute;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -24,7 +24,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private int count;
 
@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
         Intent intent = new Intent(MainActivity.this, BackGroundService.class);
         startService(intent);
 
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ActivityRoute activityRoute = (ActivityRoute) Router.getRoute("activity://second");
+                activityRoute.open();
             }
         });
     }
