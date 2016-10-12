@@ -16,6 +16,7 @@ public class LabApplication extends Application {
         super.onCreate();
         sApplication = this;
         Router.initBrowserRouter(this);
+        Router.initActivityRouter(getApplicationContext());
     }
 
     private static Application sApplication;
