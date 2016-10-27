@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.snail.labaffinity.R;
 
+import butterknife.ButterKnife;
+
 /**
  * Author: hzlishang
  * Data: 16/10/12 上午9:57
@@ -26,5 +28,6 @@ public class BaseActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
     }
 }
