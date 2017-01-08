@@ -2,6 +2,8 @@ package com.snail.labaffinity.app;
 
 import android.app.Application;
 
+import com.snail.labaffinity.utils.LogUtils;
+
 import cn.campusapp.router.Router;
 
 /**
@@ -17,6 +19,7 @@ public class LabApplication extends Application {
         sApplication = this;
         Router.initBrowserRouter(this);
         Router.initActivityRouter(getApplicationContext());
+        LogUtils.v("LabApplication create");
     }
 
     private static Application sApplication;
