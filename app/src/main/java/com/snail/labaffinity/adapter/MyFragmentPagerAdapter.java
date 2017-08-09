@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.snail.labaffinity.MyFragment;
-
 /**
  * Author: lishang
  * Data: 17/1/5 下午2:10

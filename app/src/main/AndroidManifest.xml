@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
         <service android:name=".service.BackGroundService"/>
-        <activity android:name=".activity.ViewPagerFragmentAdapterActivity"/>
     </application>
 
 </manifest>
