@@ -4,21 +4,22 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.ViewCompat
 
 //垂直滚动的ScrollView嵌套recyvleview
+//FrameLayout对于自定垂直的布局很方便
 class NestRecycleViewScrollView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
 
     val TAG = "NestRecycleViewScrollView"
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        Log.v(TAG, "onStartNestedScroll")
+        Log.v(TAG, "onStartNestedScroll " +(axes == ViewCompat.SCROLL_AXIS_VERTICAL))
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
@@ -58,11 +59,17 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         Log.v(TAG, "onNestedPreScroll")
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        var top = t
+        var bottom = b
+        for (i in 0 until childCount) {
+            getChildAt(i).layout(l, top, r, bottom)
+            top += getChildAt(i).measuredHeight
+            bottom += getChildAt(i).measuredHeight
+        }
     }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        super.onLayout(changed, l, t, r, b)
+    override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
+        return super.onNestedPreFling(target, velocityX, velocityY)
     }
 }
