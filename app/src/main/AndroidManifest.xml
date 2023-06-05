@@ -2,6 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.snail.labaffinity">
 
+    <!-- Window -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 网络相关 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 存储相关 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 系统相关 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 华为推送 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.netease.db.PERMISSION_WITH_SIGNATURE" />
+    <!-- 位置相关 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.hardware.location.gps" />
+
+    <!-- 视频相关-->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 摄像头 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 录音 -->
+
+    <!-- 截屏监听需要 -->
+    <uses-permission android:name="MediaStore.Images.Media.INTERNAL_CONTENT_URI" />
+    <uses-permission android:name="MediaStore.Images.Media.EXTERNAL_CONTENT_URI" />
+
+
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:name=".app.LabApplication"
         android:allowBackup="true"
@@ -19,6 +53,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".test.NestedScrollViewActivity" />
+        <activity android:name=".test.RecyclerViewNestTestActivity" />
+
         <service android:name=".service.BackGroundService"/>
     </application>
 
