@@ -3,13 +3,13 @@ package com.snail.labaffinity.view
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.OverScroller
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 
 //垂直滚动的ScrollView嵌套recyvleview
@@ -21,24 +21,21 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
     defStyleRes: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
 
-    lateinit var upView: NestedScrollView
+    lateinit var upView: View
     lateinit var bottomView: RecyclerView
     lateinit var helper: NestedScrollingParentHelper
     var maxScrollHeight = 0
     var totalHeight = 0
     val TAG = "NestRecycleViewScrollView"
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        Log.v(TAG, "onStartNestedScroll " + (axes == ViewCompat.SCROLL_AXIS_VERTICAL))
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) {
-        Log.v(TAG, "onNestedScrollAccepted")
     }
 
     override fun onStopNestedScroll(target: View, type: Int) {
-        Log.v(TAG, "onStopNestedScroll $target")
-        helper.onStopNestedScroll(target);
+        helper.onStopNestedScroll(target)
     }
 
     override fun onNestedScroll(
@@ -50,8 +47,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         type: Int,
         consumed: IntArray,
     ) {
-        Log.v(TAG, "onNestedScroll $dyConsumed $dyUnconsumed ")
-        scrollBy(0, dyUnconsumed)
+
     }
 
     override fun onNestedScroll(
@@ -62,22 +58,73 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         dyUnconsumed: Int,
         type: Int,
     ) {
-        Log.v(TAG, "onNestedPreScroll  $target ")
     }
 
-
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        Log.v(TAG, "onNestedPreScroll$consumed $dy  $target ")
+        overScrollerNest.abortAnimation()
+        var pConsume: Int = 0
+        var cConsume: Int = 0
+        if (dy > 0) {
+            if (scrollY in 1 until measuredHeight) {
+                pConsume = Math.min(dy, measuredHeight - scrollY)
+                scrollBy(0, pConsume)
+                cConsume = dy - pConsume
+                if (target.canScrollVertically(cConsume)) {
+                    target.scrollBy(0, cConsume)
+                }
+            } else if (scrollY == 0) {
+
+                if (target.canScrollVertically(dy)) {
+                    target.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            } else if (scrollY == measuredHeight) {
+                if (target.canScrollVertically(dy)) {
+                    target.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            }
+        } else {
+            if (scrollY in 1 until measuredHeight) {
+                pConsume = Math.max(dy, -scrollY)
+                scrollBy(0, pConsume)
+                cConsume = dy - pConsume
+                if (target.canScrollVertically(cConsume)) {
+                    target.scrollBy(0, cConsume)
+                }
+            } else if (scrollY == measuredHeight) {
+                if (target.canScrollVertically(dy)) {
+                    target.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            } else {
+                if (target.canScrollVertically(dy)) {
+                    target.scrollBy(0, dy)
+                }
+            }
+        }
+        consumed[1] = dy
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        upView = getChildAt(0) as NestedScrollView
+        upView = getChildAt(0)
         bottomView = getChildAt(1) as RecyclerView
         helper = NestedScrollingParentHelper(this)
-        overScroller = OverScroller(context)
+        overScrollerNest = OverScroller(context)
         if (childCount != 2)
             throw java.lang.RuntimeException("必须两个View，上面是NestScrollView，下面是RecycleView")
+
+
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -98,25 +145,97 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         velocityY: Float,
         consumed: Boolean,
     ): Boolean {
-        Log.v(TAG, "onNestedFling $consumed$velocityY")
         return super.onNestedFling(target, velocityX, velocityY, consumed)
     }
 
 
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
-        Log.v(TAG, "onNestedPreFling  $velocityY")
+        mLastOverScrollerValue = 0
+        Log.v("lishang", "onNestedPreFling " + overScrollerNest.currY)
+        overScrollerNest.fling(
+            0, 0, velocityX.toInt(),
+            velocityY.toInt(), 0, 0, -totalHeight * 10, totalHeight * 10
+        )
+        //  这里必须加上，不然可能无法触发
+        invalidate()
         return true
     }
 
+    var mLastOverScrollerValue = 0
     override fun computeScroll() {
         super.computeScroll()
-        canScrollVertically(1)
-
+        Log.v("lishang", "overScroller.currY " + overScrollerNest.currY)
+        if (overScrollerNest.computeScrollOffset()) {
+            scrollInner(overScrollerNest.currY - mLastOverScrollerValue)
+            mLastOverScrollerValue = overScrollerNest.currY
+            invalidate()
+        }
     }
 
-    lateinit var overScroller: OverScroller
+    private lateinit var overScrollerNest: OverScroller
 
-    override fun computeHorizontalScrollRange(): Int {
+    override fun computeVerticalScrollRange(): Int {
         return totalHeight
     }
+
+    private fun scrollInner(dy: Int) {
+        var pConsume: Int = 0
+        var cConsume: Int = 0
+        if (dy > 0) {
+            if (scrollY in 1 until measuredHeight) {
+                pConsume = Math.min(dy, measuredHeight - scrollY)
+                scrollBy(0, pConsume)
+                cConsume = dy - pConsume
+                if (bottomView.canScrollVertically(cConsume)) {
+                    bottomView.scrollBy(0, cConsume)
+                }
+            } else if (scrollY == 0) {
+
+                if (upView.canScrollVertically(dy)) {
+                    upView.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            } else if (scrollY == measuredHeight) {
+                if (bottomView.canScrollVertically(dy)) {
+                    bottomView.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            }
+        } else {
+            if (scrollY in 1 until measuredHeight) {
+                pConsume = Math.max(dy, -scrollY)
+                scrollBy(0, pConsume)
+                cConsume = dy - pConsume
+                if (bottomView.canScrollVertically(cConsume)) {
+                    bottomView.scrollBy(0, cConsume)
+                }
+            } else if (scrollY == measuredHeight) {
+                if (bottomView.canScrollVertically(dy)) {
+                    bottomView.scrollBy(0, dy)
+                } else {
+                    if (canScrollVertically(dy)) {
+                        scrollBy(0, dy)
+                    }
+                }
+            } else {
+                if (upView.canScrollVertically(dy)) {
+                    upView.scrollBy(0, dy)
+                }
+            }
+        }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+
+        if (ev?.action == MotionEvent.ACTION_DOWN)
+            overScrollerNest.abortAnimation()
+        return super.dispatchTouchEvent(ev)
+    }
+
 }

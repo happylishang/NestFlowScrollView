@@ -32,7 +32,7 @@ class RecyclerViewNestTestActivity : AppCompatActivity() {
             override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                 //  强制类型转换
                 ((holder.itemView) as Button).text = "$position"
-                LogUtils.v(""+position)
+                LogUtils.v("position $position")
             }
 
         }
