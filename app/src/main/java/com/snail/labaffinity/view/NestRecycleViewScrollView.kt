@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.OverScroller
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
@@ -24,6 +25,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
     lateinit var bottomView: RecyclerView
     lateinit var helper: NestedScrollingParentHelper
     var maxScrollHeight = 0
+    var totalHeight = 0
     val TAG = "NestRecycleViewScrollView"
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
         Log.v(TAG, "onStartNestedScroll " + (axes == ViewCompat.SCROLL_AXIS_VERTICAL))
@@ -48,7 +50,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         type: Int,
         consumed: IntArray,
     ) {
-        Log.v(TAG, "onNestedScroll $dxUnconsumed $dyUnconsumed ")
+        Log.v(TAG, "onNestedScroll $dyConsumed $dyUnconsumed ")
         scrollBy(0, dyUnconsumed)
     }
 
@@ -60,7 +62,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         dyUnconsumed: Int,
         type: Int,
     ) {
-
+        Log.v(TAG, "onNestedPreScroll  $target ")
     }
 
 
@@ -73,6 +75,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         upView = getChildAt(0) as NestedScrollView
         bottomView = getChildAt(1) as RecyclerView
         helper = NestedScrollingParentHelper(this)
+        overScroller = OverScroller(context)
         if (childCount != 2)
             throw java.lang.RuntimeException("必须两个View，上面是NestScrollView，下面是RecycleView")
     }
@@ -84,9 +87,9 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
             getChildAt(i).layout(l, top, r, bottom)
             top += getChildAt(i).measuredHeight
             bottom += getChildAt(i).measuredHeight
-            maxScrollHeight += getChildAt(i).measuredHeight
+            totalHeight += getChildAt(i).measuredHeight
         }
-        maxScrollHeight -= measuredHeight
+        maxScrollHeight = totalHeight - measuredHeight
     }
 
     override fun onNestedFling(
@@ -95,12 +98,25 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
         velocityY: Float,
         consumed: Boolean,
     ): Boolean {
-        Log.v(TAG, "onNestedFling")
+        Log.v(TAG, "onNestedFling $consumed$velocityY")
         return super.onNestedFling(target, velocityX, velocityY, consumed)
     }
 
+
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
         Log.v(TAG, "onNestedPreFling  $velocityY")
-        return super.onNestedPreFling(target, velocityX, velocityY)
+        return true
+    }
+
+    override fun computeScroll() {
+        super.computeScroll()
+        canScrollVertically(1)
+
+    }
+
+    lateinit var overScroller: OverScroller
+
+    override fun computeHorizontalScrollRange(): Int {
+        return totalHeight
     }
 }

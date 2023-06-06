@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.snail.labaffinity.databinding.ActivityRenestTestBinding
+import com.snail.labaffinity.utils.LogUtils
 
 class RecyclerViewNestTestActivity : AppCompatActivity() {
 
@@ -31,6 +32,7 @@ class RecyclerViewNestTestActivity : AppCompatActivity() {
             override fun onBindViewHolder(holder: ViewHolder, position: Int) {
                 //  强制类型转换
                 ((holder.itemView) as Button).text = "$position"
+                LogUtils.v(""+position)
             }
 
         }
