@@ -57,6 +57,10 @@ class MyNestScrollScrollView @JvmOverloads constructor(
         return true
     }
 
+    //    自己不消费
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        return false
+    }
     private val gestureDetector: GestureDetector =
         GestureDetector(context, object : SimpleOnGestureListener() {
             override fun onFling(

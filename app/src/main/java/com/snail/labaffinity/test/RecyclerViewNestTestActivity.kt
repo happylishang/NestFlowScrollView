@@ -6,7 +6,10 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.snail.labaffinity.databinding.ActivityRenestTestBinding
@@ -47,8 +50,34 @@ class RecyclerViewNestTestActivity : AppCompatActivity() {
             }
 
         }
+        binding.recyclerView.adapter =
+            object : ListAdapter<String, ViewHolder>(object : ItemCallback<String>() {
+                override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+                    return oldItem == newItem
+                }
 
+                override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+                    return oldItem == newItem
+                }
+
+            }) {
+                //  type
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                    val button = Button(this@RecyclerViewNestTestActivity)
+                    return object : ViewHolder(button) {}
+                }
+
+                override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+                    ((holder.itemView) as Button).text = "$position"
+                    LogUtils.v("position $position")
+                    ((holder.itemView) as Button).setOnClickListener { ToastUtil.show("position $position") }
+                }
+            }
+        val list = mutableListOf<String>()
+        for (i in 0..200) {
+            list.add("po $i")
+        }
+        (binding.recyclerView.adapter as ListAdapter<String, ViewHolder>).submitList(list)
     }
-
 
 }
