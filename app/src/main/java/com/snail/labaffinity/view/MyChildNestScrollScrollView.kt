@@ -17,7 +17,7 @@ import androidx.core.view.ViewCompat
  * 不过好处是跟父控件都可以省略intercept之类的逻辑
  * ACTION_MOVE
  * */
-class MyNestScrollScrollView @JvmOverloads constructor(
+class MyChildNestScrollScrollView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

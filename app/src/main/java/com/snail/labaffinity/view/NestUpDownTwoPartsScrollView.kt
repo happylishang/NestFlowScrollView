@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 //自定义父类其实也要拦截底部的，不然不好处理fling，或者说，也是类似的拦截，尤其衔接的问题，
 // target越界了，先放的第二任衔接的不是原来的target如何处理衔接问题呢，没有子target可给了
 //很少有万能的自定义View，看场景实现吧
-class NestRecycleViewScrollView @JvmOverloads constructor(
+class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

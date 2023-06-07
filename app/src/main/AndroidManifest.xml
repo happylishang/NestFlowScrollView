@@ -54,7 +54,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".test.NestedScrollViewActivity" />
-        <activity android:name=".test.RecyclerViewNestTestActivity" />
+        <activity android:name=".test.NestScrollRecyclerViewTestActivity" />
+        <activity android:name=".test.CustomNestScrollRecyclerViewTestActivity" />
 
         <service android:name=".service.BackGroundService"/>
     </application>

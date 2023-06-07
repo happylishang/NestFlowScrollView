@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.snail.labaffinity.view.MyChildNestScrollScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -19,7 +19,7 @@
                 android:orientation="vertical">
 
             </LinearLayout>
-        </com.snail.labaffinity.view.MyChildNestScrollScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
