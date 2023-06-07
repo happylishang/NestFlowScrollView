@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * @author fangkw on 2020-10-23
+ * @author 自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局
  **/
 class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : RecyclerView(context, attributeSet) {
 
