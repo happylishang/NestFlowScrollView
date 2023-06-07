@@ -17,6 +17,7 @@ class NetScrollWebView @JvmOverloads constructor(
 
     init {
         chileNestHelper.isNestedScrollingEnabled = true
+        settings.javaScriptEnabled = true
     }
 
     override fun startNestedScroll(axes: Int, type: Int): Boolean {

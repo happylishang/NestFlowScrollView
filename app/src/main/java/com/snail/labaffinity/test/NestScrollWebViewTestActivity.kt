@@ -17,7 +17,7 @@ class NestScrollWebViewTestActivity : AppCompatActivity() {
                 ToastUtil.show("position  $i")
             }
         }
-        binding.webview.loadUrl("https://juejin.cn/")
+        binding.webview.loadUrl("https://juejin.cn/post/6844903761060577294")
     }
 
 }
