@@ -189,8 +189,9 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
                 if (bottomView.canScrollVertically(cConsume)) {
                     bottomView.scrollBy(0, cConsume)
                 }
+                upView.scrollTo(0, measuredHeight)
             } else if (scrollY == 0) {
-
+                bottomView.scrollTo(0, 0)
                 if (upView.canScrollVertically(dy)) {
                     upView.scrollBy(0, dy)
                 } else {
@@ -199,6 +200,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
                     }
                 }
             } else if (scrollY == measuredHeight) {
+                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
@@ -217,6 +219,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
                     bottomView.scrollBy(0, cConsume)
                 }
             } else if (scrollY == measuredHeight) {
+                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
@@ -228,6 +231,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
                 if (upView.canScrollVertically(dy)) {
                     upView.scrollBy(0, dy)
                 }
+                bottomView.scrollTo(0, 0)
             }
         }
     }
