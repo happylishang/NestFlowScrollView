@@ -65,59 +65,13 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
         overScrollerNest.abortAnimation()
-        var pConsume: Int = 0
-        var cConsume: Int = 0
-        if (dy > 0) {
-            if (scrollY in 1 until measuredHeight) {
-                pConsume = Math.min(dy, measuredHeight - scrollY)
-                scrollBy(0, pConsume)
-                cConsume = dy - pConsume
-                if (target.canScrollVertically(cConsume)) {
-                    target.scrollBy(0, cConsume)
-                }
-            } else if (scrollY == 0) {
-
-                if (target.canScrollVertically(dy)) {
-                    target.scrollBy(0, dy)
-                } else {
-                    if (canScrollVertically(dy)) {
-                        scrollBy(0, dy)
-                    }
-                }
-            } else if (scrollY == measuredHeight) {
-                if (target.canScrollVertically(dy)) {
-                    target.scrollBy(0, dy)
-                } else {
-                    if (canScrollVertically(dy)) {
-                        scrollBy(0, dy)
-                    }
-                }
-            }
-        } else {
-            if (scrollY in 1 until measuredHeight) {
-                pConsume = Math.max(dy, -scrollY)
-                scrollBy(0, pConsume)
-                cConsume = dy - pConsume
-                if (target.canScrollVertically(cConsume)) {
-                    target.scrollBy(0, cConsume)
-                }
-            } else if (scrollY == measuredHeight) {
-                if (target.canScrollVertically(dy)) {
-                    target.scrollBy(0, dy)
-                } else {
-                    if (canScrollVertically(dy)) {
-                        scrollBy(0, dy)
-                    }
-                }
-            } else {
-                if (target.canScrollVertically(dy)) {
-                    target.scrollBy(0, dy)
-                }
-            }
-        }
+        scrollInner(dy)
         consumed[1] = dy
     }
 
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        return super.onInterceptTouchEvent(ev)
+    }
     override fun onFinishInflate() {
         super.onFinishInflate()
         upView = getChildAt(0)
