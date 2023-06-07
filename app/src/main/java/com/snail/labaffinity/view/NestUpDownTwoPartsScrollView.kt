@@ -2,7 +2,6 @@ package com.snail.labaffinity.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -120,7 +119,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     var mLastOverScrollerValue = 0
     override fun computeScroll() {
         super.computeScroll()
-        Log.v("lishang", "overScroller.currY " + overScrollerNest.currY)
         if (overScrollerNest.computeScrollOffset()) {
             scrollInner(overScrollerNest.currY - mLastOverScrollerValue)
             mLastOverScrollerValue = overScrollerNest.currY
@@ -138,8 +136,8 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         var pConsume: Int = 0
         var cConsume: Int = 0
         if (dy > 0) {
-            if (scrollY in 1 until measuredHeight) {
-                pConsume = dy.coerceAtMost(measuredHeight - scrollY)
+            if (scrollY in 1 until maxScrollHeight) {
+                pConsume = dy.coerceAtMost(maxScrollHeight - scrollY)
                 scrollBy(0, pConsume)
                 cConsume = dy - pConsume
                 if (bottomView.canScrollVertically(cConsume)) {
@@ -154,7 +152,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                         scrollBy(0, dy)
                     }
                 }
-            } else if (scrollY == measuredHeight) {
+            } else if (scrollY == maxScrollHeight) {
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
@@ -164,14 +162,14 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 }
             }
         } else {
-            if (scrollY in 1 until measuredHeight) {
+            if (scrollY in 1 until maxScrollHeight) {
                 pConsume = Math.max(dy, -scrollY)
                 scrollBy(0, pConsume)
                 cConsume = dy - pConsume
                 if (bottomView.canScrollVertically(cConsume)) {
                     bottomView.scrollBy(0, cConsume)
                 }
-            } else if (scrollY == measuredHeight) {
+            } else if (scrollY == maxScrollHeight) {
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
