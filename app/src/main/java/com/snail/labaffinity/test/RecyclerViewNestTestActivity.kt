@@ -1,6 +1,8 @@
 package com.snail.labaffinity.test
 
 import android.os.Bundle
+import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.snail.labaffinity.databinding.ActivityRenestTestBinding
 import com.snail.labaffinity.utils.LogUtils
+import com.snail.labaffinity.utils.ToastUtil
+import com.snail.labaffinity.utils.ViewHelper
 
 class RecyclerViewNestTestActivity : AppCompatActivity() {
 
@@ -16,6 +20,12 @@ class RecyclerViewNestTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityRenestTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        for (i in 0..30) {
+            ViewHelper.addButton(binding.lvContainer, "position  $i") {
+                ToastUtil.show("position  $i")
+            }
+        }
+
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = object : RecyclerView.Adapter<ViewHolder>() {
@@ -33,6 +43,7 @@ class RecyclerViewNestTestActivity : AppCompatActivity() {
                 //  强制类型转换
                 ((holder.itemView) as Button).text = "$position"
                 LogUtils.v("position $position")
+                ((holder.itemView) as Button).setOnClickListener { ToastUtil.show("position $position") }
             }
 
         }

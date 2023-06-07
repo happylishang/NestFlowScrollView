@@ -8,41 +8,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+        <com.snail.labaffinity.view.MyNestScrollScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/lv_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:text="Button" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:text="Button" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:text="Button" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:text="Button" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:text="Button" />
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </com.snail.labaffinity.view.MyNestScrollScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
