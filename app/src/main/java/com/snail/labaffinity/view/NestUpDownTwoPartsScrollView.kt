@@ -10,7 +10,6 @@ import android.widget.OverScroller
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
-import androidx.recyclerview.widget.RecyclerView
 
 //垂直滚动的ScrollView嵌套recyvleview
 //FrameLayout对于自定垂直的布局很方便
@@ -25,7 +24,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
 
     lateinit var upView: View
-    lateinit var bottomView: RecyclerView
+    lateinit var bottomView: View
     lateinit var helper: NestedScrollingParentHelper
     var maxScrollHeight = 0
     var totalHeight = 0
@@ -75,7 +74,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
         upView = getChildAt(0)
-        bottomView = getChildAt(1) as RecyclerView
+        bottomView = getChildAt(1) 
         helper = NestedScrollingParentHelper(this)
         overScrollerNest = OverScroller(context)
         if (childCount != 2)
