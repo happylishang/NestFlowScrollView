@@ -71,10 +71,11 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return super.onInterceptTouchEvent(ev)
     }
+
     override fun onFinishInflate() {
         super.onFinishInflate()
         upView = getChildAt(0)
-        bottomView = getChildAt(1) 
+        bottomView = getChildAt(1)
         helper = NestedScrollingParentHelper(this)
         overScrollerNest = OverScroller(context)
         if (childCount != 2)
@@ -107,7 +108,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
 
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
         mLastOverScrollerValue = 0
-        Log.v("lishang", "onNestedPreFling " + overScrollerNest.currY)
         overScrollerNest.fling(
             0, 0, velocityX.toInt(),
             velocityY.toInt(), 0, 0, -totalHeight * 10, totalHeight * 10
@@ -139,13 +139,12 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         var cConsume: Int = 0
         if (dy > 0) {
             if (scrollY in 1 until measuredHeight) {
-                pConsume = Math.min(dy, measuredHeight - scrollY)
+                pConsume = dy.coerceAtMost(measuredHeight - scrollY)
                 scrollBy(0, pConsume)
                 cConsume = dy - pConsume
                 if (bottomView.canScrollVertically(cConsume)) {
                     bottomView.scrollBy(0, cConsume)
                 }
-                upView.scrollTo(0, measuredHeight)
             } else if (scrollY == 0) {
                 bottomView.scrollTo(0, 0)
                 if (upView.canScrollVertically(dy)) {
@@ -156,7 +155,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                     }
                 }
             } else if (scrollY == measuredHeight) {
-                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
@@ -170,12 +168,10 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 pConsume = Math.max(dy, -scrollY)
                 scrollBy(0, pConsume)
                 cConsume = dy - pConsume
-                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(cConsume)) {
                     bottomView.scrollBy(0, cConsume)
                 }
             } else if (scrollY == measuredHeight) {
-                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
