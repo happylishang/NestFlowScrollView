@@ -212,6 +212,7 @@ class NestRecycleViewScrollView @JvmOverloads constructor(
                 pConsume = Math.max(dy, -scrollY)
                 scrollBy(0, pConsume)
                 cConsume = dy - pConsume
+                upView.scrollTo(0, measuredHeight)
                 if (bottomView.canScrollVertically(cConsume)) {
                     bottomView.scrollBy(0, cConsume)
                 }
