@@ -24,7 +24,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
 
     lateinit var upView: View
     lateinit var bottomView: View
-    lateinit var helper: NestedScrollingParentHelper
     var maxScrollHeight = 0
     var totalHeight = 0
     val TAG = "NestRecycleViewScrollView"
@@ -36,7 +35,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     }
 
     override fun onStopNestedScroll(target: View, type: Int) {
-        helper.onStopNestedScroll(target)
+        super.onStopNestedScroll(target)
     }
 
     override fun onNestedScroll(
@@ -75,7 +74,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         super.onFinishInflate()
         upView = getChildAt(0)
         bottomView = getChildAt(1)
-        helper = NestedScrollingParentHelper(this)
         overScrollerNest = OverScroller(context)
         if (childCount != 2)
             throw java.lang.RuntimeException("必须两个View，上面是NestScrollView，下面是RecycleView")
