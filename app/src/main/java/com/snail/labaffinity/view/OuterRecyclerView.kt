@@ -8,11 +8,13 @@ import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.RuntimeException
 
 /**
  * @author 自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局
  **/
-class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : RecyclerView(context, attributeSet) {
+class OuterRecyclerView(context: Context, attributeSet: AttributeSet) :
+    RecyclerView(context, attributeSet) {
 
     private val mParentScrollConsumed = IntArray(2)
 
@@ -72,9 +74,9 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : Recycler
         if (type == ViewCompat.TYPE_TOUCH) {
             // up
             if (dy > 0) {
-            //  已经到顶了
+                //  已经到顶了
                 if (!canScrollVertically(1)) {
-                    val target = fetchNestedChild()
+                    val target = fetchBottomNestedScrollChild()
                     target?.apply {
                         this.scrollBy(0, dy)
 
@@ -88,11 +90,11 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : Recycler
             }
             // down 其实还是整体的parent控制，而不是底层控制
             if (dy < 0) {
-                val target = fetchNestedChild()
+                val target = fetchBottomNestedScrollChild()
                 target?.apply {
                     if (this.canScrollVertically(-1)) {
                         this.scrollBy(0, dy)
-        //   消耗完，不给底层机会
+                        //   消耗完，不给底层机会
                         consumed?.let {
                             it[1] = dy
                         }
@@ -105,7 +107,13 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : Recycler
 
         // Now let our nested parent consume the leftovers
         val parentScrollConsumed = mParentScrollConsumed
-        val parentConsumed = super.dispatchNestedPreScroll(dx, dy - (consumed?.get(1)?:0), parentScrollConsumed, offsetInWindow, type)
+        val parentConsumed = super.dispatchNestedPreScroll(
+            dx,
+            dy - (consumed?.get(1) ?: 0),
+            parentScrollConsumed,
+            offsetInWindow,
+            type
+        )
         consumed?.let {
             consumed[1] += parentScrollConsumed[1]
         }
@@ -136,13 +144,18 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : Recycler
         invalidate()
     }
 
-    private fun fetchNestedChild() : View? {
-        val view = getChildAt(childCount-1)
-//        if (view is TabLinearLayout) {
-//            return view.innerRecyclerView
-//        }
-        if (view is RecyclerView) {
-            return view
+
+    interface IBottomNestedScrollChild {
+        fun getTargetScrollView(): View?
+    }
+
+    //  底部必须添加约束
+    private fun fetchBottomNestedScrollChild(): View? {
+        val view = getChildAt(childCount - 1)
+        if (view is IBottomNestedScrollChild) {
+            return (view as IBottomNestedScrollChild).getTargetScrollView()
+        }else{
+            throw RuntimeException("必须实现IBottomNestedScrollChild，并返回目标滚动View")
         }
         return null
     }
@@ -153,7 +166,7 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) : Recycler
             val dy = current - mCurrentFling
             mCurrentFling = current
 
-            val target = fetchNestedChild()
+            val target = fetchBottomNestedScrollChild()
             if (dy > 0) {
                 if (canScrollVertically(1)) {
                     scrollBy(0, dy)

@@ -48,7 +48,7 @@ class NetScrollWebView @JvmOverloads constructor(
         return true
     }
 
-    //    自己不消费
+    //    强制自己不消费
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         return false
     }
