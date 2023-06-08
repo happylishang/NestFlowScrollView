@@ -26,7 +26,7 @@ class NetScrollWebView @JvmOverloads constructor(
     }
 
 
-    var mLastY: Float = 0f
+    private var mLastY: Float = 0f
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         super.dispatchTouchEvent(ev)
         ev?.let { gestureDetector.onTouchEvent(it) }
@@ -125,7 +125,4 @@ class NetScrollWebView @JvmOverloads constructor(
         return chileNestHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
 }

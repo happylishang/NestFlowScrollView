@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.lang.RuntimeException
 
 /**
- * @author 自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局
+ *  自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局,很鸡贼的做法
  **/
 class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     RecyclerView(context, attributeSet) {

@@ -154,9 +154,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
-                    if (canScrollVertically(dy)) {
-                        scrollBy(0, dy)
-                    }
+                    overScrollerNest.abortAnimation()
                 }
             }
         } else {
