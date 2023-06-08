@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.snail.labaffinity.databinding.ActivityMainBinding
 import com.snail.labaffinity.test.CustomNestScrollRecyclerViewTestActivity
+import com.snail.labaffinity.test.NestRecycleViewInnerWebviewTestActivity
 import com.snail.labaffinity.test.NestScrollRecyclerViewTestActivity
 import com.snail.labaffinity.test.NestScrollWebViewTestActivity
 import com.snail.labaffinity.utils.ViewHelper
@@ -24,6 +25,11 @@ class MainActivity : BaseActivity() {
         ViewHelper.addButton(binding.contentMain.container, "NestScrollWebViewTestActivity") {
             startActivity(Intent(this@MainActivity, NestScrollWebViewTestActivity::class.java))
         }
+        ViewHelper.addButton(binding.contentMain.container, "NestRecycleViewInnerWebviewTestActivity") {
+            startActivity(Intent(this@MainActivity, NestRecycleViewInnerWebviewTestActivity::class.java))
+        }
+
+
 
     }
 

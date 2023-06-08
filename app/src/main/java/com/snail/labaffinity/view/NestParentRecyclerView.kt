@@ -13,7 +13,7 @@ import java.lang.RuntimeException
 /**
  * @author 自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局
  **/
-class OuterRecyclerView(context: Context, attributeSet: AttributeSet) :
+class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     RecyclerView(context, attributeSet) {
 
     private val mParentScrollConsumed = IntArray(2)
@@ -154,8 +154,6 @@ class OuterRecyclerView(context: Context, attributeSet: AttributeSet) :
         val view = getChildAt(childCount - 1)
         if (view is IBottomNestedScrollChild) {
             return (view as IBottomNestedScrollChild).getTargetScrollView()
-        }else{
-            throw RuntimeException("必须实现IBottomNestedScrollChild，并返回目标滚动View")
         }
         return null
     }
