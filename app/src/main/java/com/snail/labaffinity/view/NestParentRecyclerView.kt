@@ -123,6 +123,8 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     /**
      * fling 回调是一次性的 无法同时分发到两个View
      * 只能自己托管fling
+     *
+     * fling必须自己托管
      * */
     override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
         fling(velocityY)
