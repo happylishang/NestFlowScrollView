@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.snail.labaffinity.R
 import com.snail.labaffinity.databinding.ActivityNestRecycleviewInnerwebviewBinding
 import com.snail.labaffinity.databinding.ActivityNestscrollWebviewTestBinding
 import com.snail.labaffinity.utils.LogUtils
@@ -19,12 +20,14 @@ import com.snail.labaffinity.view.NetRecycleViewWebView
 
 class NestRecycleViewInnerWebviewTestActivity : AppCompatActivity() {
     val list = mutableListOf<ItemVo>()
+    var webview: WebView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityNestRecycleviewInnerwebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-     val webview=   NetRecycleViewWebView(this@NestRecycleViewInnerWebviewTestActivity)
-        webview.loadUrl("https://juejin.cn/post/6844903761060577294")
+
+
         val adapter =
             object :
                 androidx.recyclerview.widget.ListAdapter<ItemVo, ViewHolder>(object :
@@ -39,9 +42,15 @@ class NestRecycleViewInnerWebviewTestActivity : AppCompatActivity() {
                 }) {
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
                     if (viewType == itemCount - 1) {
+                        webview =
+                            layoutInflater.inflate(R.layout.item_webview, parent, false).findViewById(R.id.webview)
+                        webview?.loadUrl("https://juejin.cn/post/6844903761060577294")
+
                         return object :
-                            ViewHolder(webview) {}
+                            ViewHolder(webview!!) {}
                     }
+
+
 
                     val button = Button(this@NestRecycleViewInnerWebviewTestActivity)
                     return object : ViewHolder(button) {}
@@ -71,7 +80,6 @@ class NestRecycleViewInnerWebviewTestActivity : AppCompatActivity() {
             list.add(ItemVo("position $i", i, i))
         }
         adapter.submitList(list)
-
 
 
 //        binding.webview.loadUrl("https://juejin.cn/post/6844903761060577294")

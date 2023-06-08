@@ -122,4 +122,8 @@ class NetScrollWebView @JvmOverloads constructor(
     ): Boolean {
         return chileNestHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
     }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
 }
