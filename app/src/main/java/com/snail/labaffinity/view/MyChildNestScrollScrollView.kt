@@ -41,15 +41,15 @@ class MyChildNestScrollScrollView @JvmOverloads constructor(
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
                 dispatchNestedPreScroll(
-                    0, (mLastY - ev?.y!!).toInt(), mScrollConsumed, null,
+                    0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null,
                     ViewCompat.TYPE_TOUCH
                 )
-                mLastY = ev?.y!!
+                mLastY = ev.rawY
             }
 
             MotionEvent.ACTION_DOWN -> {
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
-                mLastY = ev?.y!!
+                mLastY = ev.rawY
             }
 
 

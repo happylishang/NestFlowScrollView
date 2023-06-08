@@ -2,6 +2,7 @@ package com.snail.labaffinity.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.webkit.WebView
@@ -32,15 +33,16 @@ class NetScrollWebView @JvmOverloads constructor(
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
                 dispatchNestedPreScroll(
-                    0, (mLastY - ev?.y!!).toInt(), mScrollConsumed, null,
+                    0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null,
                     ViewCompat.TYPE_TOUCH
                 )
-                mLastY = ev?.y!!
-            }
+                Log.v("lishang" ,"po "+(mLastY- ev.y!!))
+                mLastY = ev.rawY
 
+            }
             MotionEvent.ACTION_DOWN -> {
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
-                mLastY = ev?.y!!
+                mLastY = ev.rawY
             }
 
 
