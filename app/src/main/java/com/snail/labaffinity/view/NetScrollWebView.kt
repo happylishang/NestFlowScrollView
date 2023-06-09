@@ -24,8 +24,6 @@ class NetScrollWebView @JvmOverloads constructor(
     private var mLastY: Float = 0f
     private var dragIng: Boolean = false
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        // (新的配套方案呢)
-
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
                 if (abs(ev.rawY - mLastY) > mTouchSlop) {
@@ -56,15 +54,12 @@ class NetScrollWebView @JvmOverloads constructor(
         return true
     }
 
-    //    强制自己不消费
+    // 强制自己不消费move
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        Log.v("lishang", "compu " + ev.toString())
         if (dragIng || ev?.action == MotionEvent.ACTION_MOVE)
             return false
-
         return super.onTouchEvent(ev)
     }
 
     private val mScrollConsumed = IntArray(2)
-
 }
