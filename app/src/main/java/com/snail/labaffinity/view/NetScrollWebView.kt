@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.webkit.WebView
 import androidx.core.view.ViewCompat
+import kotlin.math.abs
 
 class NetScrollWebView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
@@ -17,21 +18,16 @@ class NetScrollWebView @JvmOverloads constructor(
     init {
         isNestedScrollingEnabled = true
         settings.javaScriptEnabled = true
-        mVelocityTracker = VelocityTracker.obtain()
-        mVelocityTracker.clear()
-
     }
 
     private var mLastY: Float = 0f
     private var dragIng: Boolean = false
-    private var pointId: Int = 0
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
- // (新的配套方案呢)
+        // (新的配套方案呢)
         super.dispatchTouchEvent(ev)
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
-
-                if (Math.abs(ev.rawY - mLastY) > mTouchSlop) {
+                if (abs(ev.rawY - mLastY) > mTouchSlop) {
                     dragIng = true
                 }
                 if (dragIng) {
@@ -50,7 +46,6 @@ class NetScrollWebView @JvmOverloads constructor(
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
                 mLastY = ev.rawY
                 dragIng = false
-                pointId = ev.getPointerId(0)
                 mVelocityTracker.clear()
 
             }
@@ -71,6 +66,5 @@ class NetScrollWebView @JvmOverloads constructor(
     }
 
     private val mScrollConsumed = IntArray(2)
-
 
 }
