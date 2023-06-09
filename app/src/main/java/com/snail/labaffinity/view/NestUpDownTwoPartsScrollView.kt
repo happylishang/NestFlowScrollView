@@ -2,8 +2,11 @@ package com.snail.labaffinity.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import android.widget.OverScroller
 import androidx.core.view.NestedScrollingParent3
@@ -21,6 +24,29 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
+
+
+    private val gestureDetector: GestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+
+            override fun onFling(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float,
+            ): Boolean {
+        //     交给父类统一处理比较好，上下两层获取的fling速度不一致
+                mLastOverScrollerValue = 0
+                overScrollerNest.fling(
+                    0, 0, velocityX.toInt(),
+                    -velocityY.toInt(), 0, 0, -totalHeight * 10, totalHeight * 10
+                )
+                //  这里必须加上，不然可能无法触发
+                invalidate()
+               return false
+            }
+        })
+
 
     lateinit var upView: View
     lateinit var bottomView: View
@@ -99,18 +125,12 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         velocityY: Float,
         consumed: Boolean,
     ): Boolean {
-        return super.onNestedFling(target, velocityX, velocityY, consumed)
+            return super.onNestedFling(target, velocityX, velocityY, consumed)
     }
 
 
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
-        mLastOverScrollerValue = 0
-        overScrollerNest.fling(
-            0, 0, velocityX.toInt(),
-            velocityY.toInt(), 0, 0, -totalHeight * 10, totalHeight * 10
-        )
-        //  这里必须加上，不然可能无法触发
-        invalidate()
+        //  获取的fling速度有差异，原因不详
         return true
     }
 
@@ -118,6 +138,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     override fun computeScroll() {
         super.computeScroll()
         if (overScrollerNest.computeScrollOffset()) {
+//            Log.v("lishang", "compu " + overScrollerNest.currY + " " + overScrollerNest.currVelocity)
             scrollInner(overScrollerNest.currY - mLastOverScrollerValue)
             mLastOverScrollerValue = overScrollerNest.currY
             invalidate()
@@ -136,9 +157,9 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         if (dy > 0) {
             if (scrollY in 1 until maxScrollHeight) {
                 pConsume = dy.coerceAtMost(maxScrollHeight - scrollY)
-                scrollBy(0, pConsume)
+                scrollBy(0, dy)
                 cConsume = dy - pConsume
-                if (bottomView.canScrollVertically(cConsume)) {
+                if (bottomView.canScrollVertically(cConsume) && cConsume!=0) {
                     bottomView.scrollBy(0, cConsume)
                 }
             } else if (scrollY == 0) {
@@ -150,7 +171,8 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                         scrollBy(0, dy)
                     }
                 }
-            } else if (scrollY == maxScrollHeight) {
+            } else if (scrollY >= maxScrollHeight) {
+                scrollTo(0, maxScrollHeight)
                 if (bottomView.canScrollVertically(dy)) {
                     bottomView.scrollBy(0, dy)
                 } else {
@@ -180,10 +202,13 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 bottomView.scrollTo(0, 0)
             }
         }
+        invalidate()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-
+        if (ev != null) {
+            gestureDetector.onTouchEvent(ev)
+        }
         if (ev?.action == MotionEvent.ACTION_DOWN)
             overScrollerNest.abortAnimation()
         return super.dispatchTouchEvent(ev)
