@@ -23,5 +23,7 @@ class NetRecycleViewWebView @JvmOverloads constructor(
     override fun getTargetScrollView(): View? {
         return this
     }
-
+    init {
+        settings.javaScriptEnabled = true
+    }
 }

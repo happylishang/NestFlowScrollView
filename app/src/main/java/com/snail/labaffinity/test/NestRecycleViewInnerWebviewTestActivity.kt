@@ -41,15 +41,19 @@ class NestRecycleViewInnerWebviewTestActivity : AppCompatActivity() {
                     }
                 }) {
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                    if (webview == null) {
+                        webview = layoutInflater.inflate(R.layout.item_webview, parent, false)
+                            .findViewById(R.id.webview)
+                        webview?.loadUrl("https://m.you.163.com/webview/itemDetail.html?id=4062072#showAttr")
+
+                    }
+
+
                     if (viewType == itemCount - 1) {
-                        webview =
-                            layoutInflater.inflate(R.layout.item_webview, parent, false).findViewById(R.id.webview)
-                        webview?.loadUrl("https://juejin.cn/post/6844903761060577294")
 
                         return object :
                             ViewHolder(webview!!) {}
                     }
-
 
 
                     val button = Button(this@NestRecycleViewInnerWebviewTestActivity)
