@@ -5,36 +5,28 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.webkit.WebView
-import androidx.core.view.NestedScrollingChild3
-import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 
 class NetScrollWebView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
-) : WebView(context, attrs), NestedScrollingChild3 {
+) : WebView(context, attrs) {
 
     private lateinit var mVelocityTracker: VelocityTracker
-    private val chileNestHelper: NestedScrollingChildHelper = NestedScrollingChildHelper(this)
     private val mTouchSlop = android.view.ViewConfiguration.get(context).scaledTouchSlop
 
     init {
-        chileNestHelper.isNestedScrollingEnabled = true
+        isNestedScrollingEnabled = true
         settings.javaScriptEnabled = true
         mVelocityTracker = VelocityTracker.obtain()
         mVelocityTracker.clear()
 
     }
 
-    override fun startNestedScroll(axes: Int, type: Int): Boolean {
-        return chileNestHelper.startNestedScroll(axes, type)
-    }
-
-
     private var mLastY: Float = 0f
     private var dragIng: Boolean = false
     private var pointId: Int = 0
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-
+ // (新的配套方案呢)
         super.dispatchTouchEvent(ev)
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
@@ -47,17 +39,15 @@ class NetScrollWebView @JvmOverloads constructor(
                         parent.requestDisallowInterceptTouchEvent(true)
                     }
                     dispatchNestedPreScroll(
-                        0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null,
-                        ViewCompat.TYPE_TOUCH
+                        0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null
                     )
-//                    Log.v("lishang", "po " + (mLastY - ev.rawY))
                     mLastY = ev.rawY
                 }
 
             }
 
             MotionEvent.ACTION_DOWN -> {
-                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
+                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
                 mLastY = ev.rawY
                 dragIng = false
                 pointId = ev.getPointerId(0)
@@ -80,55 +70,8 @@ class NetScrollWebView @JvmOverloads constructor(
         return super.onTouchEvent(ev)
     }
 
-
-
+ 
     private val mScrollConsumed = IntArray(2)
-    override fun stopNestedScroll(type: Int) {
-        chileNestHelper.stopNestedScroll()
-    }
 
-    override fun hasNestedScrollingParent(type: Int): Boolean {
-        return chileNestHelper.hasNestedScrollingParent(type)
-    }
-
-    override fun dispatchNestedScroll(
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int,
-        offsetInWindow: IntArray?,
-        type: Int,
-        consumed: IntArray,
-    ) {
-
-    }
-
-    override fun dispatchNestedScroll(
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int,
-        offsetInWindow: IntArray?,
-        type: Int,
-    ): Boolean {
-        return chileNestHelper.dispatchNestedScroll(
-            dxConsumed,
-            dxConsumed,
-            dxUnconsumed,
-            dyUnconsumed,
-            offsetInWindow,
-            type
-        )
-    }
-
-    override fun dispatchNestedPreScroll(
-        dx: Int,
-        dy: Int,
-        consumed: IntArray?,
-        offsetInWindow: IntArray?,
-        type: Int,
-    ): Boolean {
-        return chileNestHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
-    }
 
 }

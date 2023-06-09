@@ -23,7 +23,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-) : FrameLayout(context, attrs, defStyleAttr, defStyleRes), NestedScrollingParent3 {
+) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
 
     private val gestureDetector: GestureDetector =
@@ -35,7 +35,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 velocityX: Float,
                 velocityY: Float,
             ): Boolean {
-        //     交给父类统一处理比较好，上下两层获取的fling速度不一致
+                //     交给父类统一处理比较好，上下两层获取的fling速度不一致
                 mLastOverScrollerValue = 0
                 overScrollerNest.fling(
                     0, 0, velocityX.toInt(),
@@ -43,7 +43,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 )
                 //  这里必须加上，不然可能无法触发
                 invalidate()
-               return false
+                return false
             }
         })
 
@@ -53,45 +53,16 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
     var maxScrollHeight = 0
     var totalHeight = 0
     val TAG = "NestRecycleViewScrollView"
-    override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        return axes == ViewCompat.SCROLL_AXIS_VERTICAL
+
+    override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int): Boolean {
+        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
-    override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) {
-    }
-
-    override fun onStopNestedScroll(target: View, type: Int) {
-        super.onStopNestedScroll(target)
-    }
-
-    override fun onNestedScroll(
-        target: View,
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int,
-        type: Int,
-        consumed: IntArray,
-    ) {
-
-    }
-
-    override fun onNestedScroll(
-        target: View,
-        dxConsumed: Int,
-        dyConsumed: Int,
-        dxUnconsumed: Int,
-        dyUnconsumed: Int,
-        type: Int,
-    ) {
-    }
-
-    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
+    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
         overScrollerNest.abortAnimation()
         scrollInner(dy)
         consumed[1] = dy
     }
-
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return super.onInterceptTouchEvent(ev)
     }
@@ -103,8 +74,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         overScrollerNest = OverScroller(context)
         if (childCount != 2)
             throw java.lang.RuntimeException("必须两个View，上面是NestScrollView，下面是RecycleView")
-
-
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -125,7 +94,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         velocityY: Float,
         consumed: Boolean,
     ): Boolean {
-            return super.onNestedFling(target, velocityX, velocityY, consumed)
+        return super.onNestedFling(target, velocityX, velocityY, consumed)
     }
 
 
@@ -159,7 +128,7 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
                 pConsume = dy.coerceAtMost(maxScrollHeight - scrollY)
                 scrollBy(0, dy)
                 cConsume = dy - pConsume
-                if (bottomView.canScrollVertically(cConsume) && cConsume!=0) {
+                if (bottomView.canScrollVertically(cConsume) && cConsume != 0) {
                     bottomView.scrollBy(0, cConsume)
                 }
             } else if (scrollY == 0) {
