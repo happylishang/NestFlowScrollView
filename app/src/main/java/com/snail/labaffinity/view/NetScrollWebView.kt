@@ -2,11 +2,8 @@ package com.snail.labaffinity.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.VelocityTracker
-import android.view.ViewConfiguration
 import android.webkit.WebView
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
@@ -38,10 +35,6 @@ class NetScrollWebView @JvmOverloads constructor(
     private var pointId: Int = 0
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
 
-        if (ev != null) {
-            Log.v("lishang", "B " + ev.toString())
-            gestureDetector.onTouchEvent(ev)
-        }
         super.dispatchTouchEvent(ev)
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
@@ -87,24 +80,6 @@ class NetScrollWebView @JvmOverloads constructor(
         return super.onTouchEvent(ev)
     }
 
-    private val gestureDetector: GestureDetector =
-        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-
-            override fun onFling(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float,
-            ): Boolean {
-                mVelocityTracker.computeCurrentVelocity(
-                    1000,
-                    ViewConfiguration.get(context).scaledMaximumFlingVelocity.toFloat()
-                )
-                var initialVelocity = mVelocityTracker.getYVelocity(pointId).toInt()
-                Log.v("lishang", "--- initialVelocity " + initialVelocity)
-                return chileNestHelper.dispatchNestedPreFling(velocityX, -velocityY)
-            }
-        })
 
 
     private val mScrollConsumed = IntArray(2)
