@@ -50,6 +50,7 @@ class NetScrollWebView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
                 mLastY = ev.rawY
+                dragIng = false
             }
 
 
@@ -59,7 +60,11 @@ class NetScrollWebView @JvmOverloads constructor(
 
     //    强制自己不消费
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        return false
+
+        if (dragIng || ev?.action == MotionEvent.ACTION_MOVE)
+            return false
+
+        return  super.onTouchEvent(ev)
     }
 
     private val gestureDetector: GestureDetector =
