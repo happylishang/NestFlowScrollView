@@ -15,6 +15,7 @@ class NetScrollWebView @JvmOverloads constructor(
 ) : WebView(context, attrs), NestedScrollingChild3 {
 
     private val chileNestHelper: NestedScrollingChildHelper = NestedScrollingChildHelper(this)
+    val mTouchSlop = android.view.ViewConfiguration.get(context).scaledTouchSlop
 
     init {
         chileNestHelper.isNestedScrollingEnabled = true
@@ -27,19 +28,25 @@ class NetScrollWebView @JvmOverloads constructor(
 
 
     private var mLastY: Float = 0f
+    private var dragIng: Boolean = false
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         super.dispatchTouchEvent(ev)
         ev?.let { gestureDetector.onTouchEvent(it) }
         when (ev?.action) {
             MotionEvent.ACTION_MOVE -> {
-                dispatchNestedPreScroll(
-                    0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null,
-                    ViewCompat.TYPE_TOUCH
-                )
-                Log.v("lishang" ,"po "+(mLastY- ev.y!!))
-                mLastY = ev.rawY
-
+                if (Math.abs(ev.rawY - mLastY) > mTouchSlop) {
+                    dragIng = true
+                }
+                if (dragIng) {
+                    dispatchNestedPreScroll(
+                        0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null,
+                        ViewCompat.TYPE_TOUCH
+                    )
+                    Log.v("lishang", "po " + (mLastY - ev.y!!))
+                    mLastY = ev.rawY
+                }
             }
+
             MotionEvent.ACTION_DOWN -> {
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
                 mLastY = ev.rawY
