@@ -47,6 +47,10 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
             }
         })
 
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+
+        return super.onInterceptTouchEvent(ev)
+    }
 
     lateinit var upView: View
     lateinit var bottomView: View
@@ -62,9 +66,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         overScrollerNest.abortAnimation()
         scrollInner(dy)
         consumed[1] = dy
-    }
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return super.onInterceptTouchEvent(ev)
     }
 
     override fun onFinishInflate() {
@@ -87,16 +88,6 @@ class NestUpDownTwoPartsScrollView @JvmOverloads constructor(
         }
         maxScrollHeight = totalHeight - measuredHeight
     }
-
-    override fun onNestedFling(
-        target: View,
-        velocityX: Float,
-        velocityY: Float,
-        consumed: Boolean,
-    ): Boolean {
-        return super.onNestedFling(target, velocityX, velocityY, consumed)
-    }
-
 
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
         //  获取的fling速度有差异，原因不详

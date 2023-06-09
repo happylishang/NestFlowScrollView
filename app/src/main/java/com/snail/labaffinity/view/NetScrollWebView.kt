@@ -70,7 +70,6 @@ class NetScrollWebView @JvmOverloads constructor(
         return super.onTouchEvent(ev)
     }
 
- 
     private val mScrollConsumed = IntArray(2)
 
 
