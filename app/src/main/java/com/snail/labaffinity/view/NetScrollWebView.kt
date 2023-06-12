@@ -35,6 +35,7 @@ class NetScrollWebView @JvmOverloads constructor(
                     if (parent != null) {
                         parent.requestDisallowInterceptTouchEvent(true)
                     }
+                    Log.v("lishang","" +ev.y +" "+ev.rawY  )
                     dispatchNestedPreScroll(
                         0, (mLastY - ev.rawY).toInt(), mScrollConsumed, mScrollOffset
                     )
