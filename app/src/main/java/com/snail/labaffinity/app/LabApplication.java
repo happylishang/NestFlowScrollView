@@ -7,7 +7,7 @@ import com.snail.labaffinity.utils.LogUtils;
 import cn.campusapp.router.Router;
 
 /**
- * Author: hzlishang
+ * Author: lishang
  * Data: 16/10/11 下午12:44
  * Des:
  * version:

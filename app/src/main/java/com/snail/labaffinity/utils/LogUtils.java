@@ -3,7 +3,7 @@ package com.snail.labaffinity.utils;
 import android.util.Log;
 
 /**
- * Author: hzlishang
+ * Author: lishang
  * Data: 16/10/11 下午12:48
  * Des:
  * version:

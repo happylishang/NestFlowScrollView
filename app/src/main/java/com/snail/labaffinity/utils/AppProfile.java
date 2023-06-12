@@ -5,7 +5,7 @@ import android.app.Application;
 import com.snail.labaffinity.app.LabApplication;
 
 /**
- * Author: hzlishang
+ * Author: lishang
  * Data: 16/10/11 下午12:45
  * Des:
  * version:

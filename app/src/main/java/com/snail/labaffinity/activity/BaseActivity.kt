@@ -5,7 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Author: hzlishang
+ * Author: lishang
  * Data: 16/10/12 上午9:57
  * Des:
  * version:

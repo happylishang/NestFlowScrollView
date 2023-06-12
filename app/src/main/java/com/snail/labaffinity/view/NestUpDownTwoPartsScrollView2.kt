@@ -96,7 +96,6 @@ class NestUpDownTwoPartsScrollView2 @JvmOverloads constructor(
     override fun computeVerticalScrollRange(): Int {
         return totalHeight
     }
-
     private fun scrollInner(dy: Int) {
         var pConsume: Int = 0
         var cConsume: Int = 0

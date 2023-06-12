@@ -36,7 +36,7 @@ class NetScrollWebView @JvmOverloads constructor(
                         parent.requestDisallowInterceptTouchEvent(true)
                     }
                     dispatchNestedPreScroll(
-                        0, (mLastY - ev.rawY).toInt(), mScrollConsumed, null
+                        0, (mLastY - ev.rawY).toInt(), mScrollConsumed, mScrollOffset
                     )
                     mLastY = ev.rawY
                 }
@@ -46,6 +46,7 @@ class NetScrollWebView @JvmOverloads constructor(
                 dragIng = false
                 super.dispatchTouchEvent(ev)
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+                mScrollConsumed[1] = 0
                 mLastY = ev.rawY
             }
 
@@ -60,6 +61,8 @@ class NetScrollWebView @JvmOverloads constructor(
             return false
         return super.onTouchEvent(ev)
     }
+
+    private val mScrollOffset = IntArray(2)
 
     private val mScrollConsumed = IntArray(2)
 }
