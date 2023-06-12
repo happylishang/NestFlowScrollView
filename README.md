@@ -1,3 +1,5 @@
-# LabAffinity
+## NestUpDownTwoPartsScrollView
 
-主要是做一些测试用，不同的功能测试放在不同的分支，独立，不同的测试也要维护不同readme
+利用嵌套滑动实现的支持上下两部分都滚动的ViewGoup，比较适合上部分是NestScrollView，下半部分是RecycleView或者Webview
+
+
