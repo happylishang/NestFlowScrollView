@@ -16,16 +16,16 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewHelper.addButton(binding.contentMain.container, "RecyclerViewNestTestActivity") {
+        ViewHelper.addButton(binding.contentMain.container, "上半部分NestScrollView，下半部分RecyclerView") {
             startActivity(Intent(this@MainActivity, NestScrollRecyclerViewTestActivity::class.java))
         }
-        ViewHelper.addButton(binding.contentMain.container, "自定义CustomNestScrollRecyclerView") {
+        ViewHelper.addButton(binding.contentMain.container, "上半部分测试CustomNestScrollView，下半部分RecyclerView") {
             startActivity(Intent(this@MainActivity, CustomNestScrollRecyclerViewTestActivity::class.java))
         }
-        ViewHelper.addButton(binding.contentMain.container, "NestScrollWebViewTestActivity") {
+        ViewHelper.addButton(binding.contentMain.container, "上半部分NestScrollView，下半部分Webview") {
             startActivity(Intent(this@MainActivity, NestScrollWebViewTestActivity::class.java))
         }
-        ViewHelper.addButton(binding.contentMain.container, "NestRecycleViewInnerWebviewTestActivity") {
+        ViewHelper.addButton(binding.contentMain.container, "RecycleView内嵌webview") {
             startActivity(Intent(this@MainActivity, NestRecycleViewInnerWebviewTestActivity::class.java))
         }
 
