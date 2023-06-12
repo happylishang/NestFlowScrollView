@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.snail.labaffinity.view.NestUpDownTwoPartsScrollView
+    <com.snail.labaffinity.view.NestUpDownTwoPartsScrollView2
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,5 +27,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.snail.labaffinity.view.NestUpDownTwoPartsScrollView>
+    </com.snail.labaffinity.view.NestUpDownTwoPartsScrollView2>
 </androidx.constraintlayout.widget.ConstraintLayout>
