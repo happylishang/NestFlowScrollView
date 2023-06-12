@@ -24,7 +24,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/design_default_color_secondary_variant" />
 
     </com.snail.labaffinity.view.NestUpDownTwoPartsScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
