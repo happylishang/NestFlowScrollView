@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
+import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import android.widget.OverScroller
 import kotlin.math.abs
@@ -164,7 +164,7 @@ class NestUpDownTwoPartsScrollView2 @JvmOverloads constructor(
         if (ev?.action == MotionEvent.ACTION_DOWN)
             overScrollerNest.abortAnimation()
 
-        if (ev?.action == MotionEvent.ACTION_MOVE && mVerticalGestureFlag) {
+        if (ev?.action == MotionEvent.ACTION_MOVE && mBeDraging) {
             scrollInner((mLastY - ev.rawY).roundToInt())
             mLastY = ev.rawY
         }
@@ -174,25 +174,23 @@ class NestUpDownTwoPartsScrollView2 @JvmOverloads constructor(
     private var mLastY: Float = 0f
     private var mDownY: Float = 0f
     private var mDownX: Float = 0f
-    private var mVerticalGestureFlag: Boolean = false
+    private var mBeDraging: Boolean = false
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 mLastY = event.rawY
                 mDownY = event.rawY
                 mDownX = event.rawX
-                mVerticalGestureFlag = false
+                mBeDraging = false
             }
-
-            MotionEvent.ACTION_MOVE -> if (abs(event.rawY - mDownY) > android.view.ViewConfiguration.get(
+            MotionEvent.ACTION_MOVE -> if (abs(event.rawY - mDownY) >  ViewConfiguration.get(
                     context
                 ).scaledTouchSlop) {
-                mVerticalGestureFlag = true
+                mBeDraging = true
                 return true
             } else {
                 mLastY = event.rawY
             }
-
             else -> {}
         }
         return super.onInterceptTouchEvent(event)
