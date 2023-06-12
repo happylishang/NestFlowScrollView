@@ -54,12 +54,6 @@ class NestUpDownTwoPartsScrollView2 @JvmOverloads constructor(
     val TAG = "NestRecycleViewScrollView"
 
 
-    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) {
-        overScrollerNest.abortAnimation()
-        scrollInner(dy)
-        consumed[1] = dy
-    }
-
     override fun onFinishInflate() {
         super.onFinishInflate()
         upView = getChildAt(0)
