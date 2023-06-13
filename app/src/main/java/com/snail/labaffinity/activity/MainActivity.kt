@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.snail.labaffinity.databinding.ActivityMainBinding
 import com.snail.labaffinity.test.CustomNestScrollRecyclerViewTestActivity
+import com.snail.labaffinity.test.NestRecycleViewHeaderInnerWebviewTestActivity
 import com.snail.labaffinity.test.NestRecycleViewInnerWebviewTestActivity
 import com.snail.labaffinity.test.NestScrollRecyclerViewTestActivity
 import com.snail.labaffinity.test.NestScrollWebViewTestActivity
@@ -28,6 +29,11 @@ class MainActivity : BaseActivity() {
         ViewHelper.addButton(binding.contentMain.container, "RecycleView内嵌webview") {
             startActivity(Intent(this@MainActivity, NestRecycleViewInnerWebviewTestActivity::class.java))
         }
+        ViewHelper.addButton(binding.contentMain.container, "有HeaderRecycleView内嵌webview ") {
+            startActivity(Intent(this@MainActivity, NestRecycleViewHeaderInnerWebviewTestActivity::class.java))
+        }
+
+
 
     }
 

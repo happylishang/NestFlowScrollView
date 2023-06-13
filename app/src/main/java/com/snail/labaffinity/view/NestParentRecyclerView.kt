@@ -191,5 +191,6 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     private fun continueExtraFling() {
         startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
         dispatchNestedFling(0f, overScroller.currVelocity, false)
+        stopNestedScroll()
     }
 }
