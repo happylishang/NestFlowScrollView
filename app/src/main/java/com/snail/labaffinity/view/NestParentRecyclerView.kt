@@ -5,10 +5,11 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewParent
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
+import androidx.core.view.ViewParentCompat
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.RuntimeException
 
 /**
  *  自己继承自己的典范，拦截后，多余的交给自己？有点类似于自己做自己的父布局,很鸡贼的做法
@@ -24,6 +25,9 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
         t * t * t * t * t + 1.0f
     }
 
+    init {
+        isNestedScrollingEnabled=true
+    }
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev?.actionMasked == MotionEvent.ACTION_CANCEL) {
             Log.e("fang", "cancel")
@@ -34,28 +38,10 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
                 overScroller.abortAnimation()
             }
         }
+
         val ns = super.dispatchTouchEvent(ev)
         Log.e("fang", "dispatchTouchEvent-->$ns")
         return ns
-    }
-
-    /**
-     * if (actionMasked == MotionEvent.ACTION_DOWN
-     * || mFirstTouchTarget != null) {
-     * final boolean disallowIntercept = (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
-     * if (!disallowIntercept) {
-     *      intercepted = onInterceptTouchEvent(ev);
-     *      ev.setAction(action); // restore action in case it was changed
-     *   } else {
-     *      intercepted = false;
-     *   }
-     * }
-     *
-     * onInterceptTouchEvent 执行的条件 actionMasked == MotionEvent.ACTION_DOWN 或者 mFirstTouchTarget != null
-     * mFirstTouchTarget != null 的意思是 有child可以处理事件
-     * */
-    override fun onInterceptTouchEvent(e: MotionEvent?): Boolean {
-        return super.onInterceptTouchEvent(e)
     }
 
     /**
@@ -71,45 +57,11 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
         type: Int
     ): Boolean {
         var consumedSelf = false
-        if (type == ViewCompat.TYPE_TOUCH) {
-            // up
-            if (dy > 0) {
-                //  已经到顶了
-                if (!canScrollVertically(1)) {
-                    val target = fetchBottomNestedScrollChild()
-                    target?.apply {
-                        this.scrollBy(0, dy)
-
-                        consumed?.let {
-                            it[1] = dy
-                        }
-
-                        consumedSelf = true
-                    }
-                }
-            }
-            // down 其实还是整体的parent控制，而不是底层控制
-            if (dy < 0) {
-                val target = fetchBottomNestedScrollChild()
-                target?.apply {
-                    if (this.canScrollVertically(-1)) {
-                        this.scrollBy(0, dy)
-                        //   消耗完，不给底层机会
-                        consumed?.let {
-                            it[1] = dy
-                        }
-
-                        consumedSelf = true
-                    }
-                }
-            }
-        }
-
-        // Now let our nested parent consume the leftovers
+        // 先让父布局处理，还是后处理？
         val parentScrollConsumed = mParentScrollConsumed
         val parentConsumed = super.dispatchNestedPreScroll(
             dx,
-            dy - (consumed?.get(1) ?: 0),
+            dy,
             parentScrollConsumed,
             offsetInWindow,
             type
@@ -117,6 +69,39 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
         consumed?.let {
             consumed[1] += parentScrollConsumed[1]
         }
+
+        if (type == ViewCompat.TYPE_TOUCH) {
+
+            val remain = dy - (consumed?.get(1) ?: 0)
+            if (remain > 0) {
+                //  已经到顶了
+                if (!canScrollVertically(1)) {
+                    val target = fetchBottomNestedScrollChild()
+                    target?.apply {
+                        this.scrollBy(0, remain)
+                        consumed?.let {
+                            it[1] += remain
+                        }
+                        consumedSelf = true
+                    }
+                }
+            }
+            // down 其实还是整体的parent控制，而不是底层控制
+            if (remain < 0) {
+                val target = fetchBottomNestedScrollChild()
+                target?.apply {
+                    if (this.canScrollVertically(-1)) {
+                        this.scrollBy(0, remain)
+                        //   消耗完，不给底层机会
+                        consumed?.let {
+                            it[1] += remain
+                        }
+                        consumedSelf = true
+                    }
+                }
+            }
+        }
+
         return consumedSelf || parentConsumed
     }
 
@@ -176,7 +161,11 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
                     } else {
                         if (!overScroller.isFinished) {
                             overScroller.abortAnimation()
+                            // fling 先内部，给上面接管一部分
+                            startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+                            dispatchNestedFling(0f,overScroller.currVelocity,false)
                         }
+
                     }
                 }
             }
@@ -189,11 +178,15 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
                     } else {
                         if (!overScroller.isFinished) {
                             overScroller.abortAnimation()
+                            // fling 先内部，给上面接管一部分
+                             startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+                             dispatchNestedFling(0f,overScroller.currVelocity,false)
                         }
                     }
                 }
             }
             invalidate()
+
         }
         super.computeScroll()
     }

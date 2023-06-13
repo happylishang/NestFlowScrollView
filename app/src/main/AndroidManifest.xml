@@ -58,6 +58,7 @@
         <activity android:name=".test.CustomNestScrollRecyclerViewTestActivity" />
         <activity android:name=".test.NestScrollWebViewTestActivity" />
         <activity android:name=".test.NestRecycleViewInnerWebviewTestActivity" />
+        <activity android:name=".test.NestRecycleViewHeaderInnerWebviewTestActivity" />
 
         <service android:name=".service.BackGroundService"/>
     </application>

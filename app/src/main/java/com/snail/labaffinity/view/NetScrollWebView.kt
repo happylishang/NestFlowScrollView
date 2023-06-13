@@ -22,6 +22,8 @@ class NetScrollWebView @JvmOverloads constructor(
     }
 
     private var mLastY: Float = 0f
+
+    private var mLastY2: Float = 0f
     private var dragIng: Boolean = false
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         when (ev?.action) {
@@ -35,11 +37,12 @@ class NetScrollWebView @JvmOverloads constructor(
                     if (parent != null) {
                         parent.requestDisallowInterceptTouchEvent(true)
                     }
-                    Log.v("lishang","" +ev.y +" "+ev.rawY  )
+                    Log.v("lishang","" + (mLastY2-ev.y)  +" "+(mLastY-ev.rawY)  )
                     dispatchNestedPreScroll(
                         0, (mLastY - ev.rawY).toInt(), mScrollConsumed, mScrollOffset
                     )
                     mLastY = ev.rawY
+                    mLastY2 = ev.y
                 }
             }
 
