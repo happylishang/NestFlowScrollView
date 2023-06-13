@@ -5,10 +5,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewParent
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
-import androidx.core.view.ViewParentCompat
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -26,8 +24,9 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     }
 
     init {
-        isNestedScrollingEnabled=true
+        isNestedScrollingEnabled = true
     }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (ev?.actionMasked == MotionEvent.ACTION_CANCEL) {
             Log.e("fang", "cancel")
@@ -162,8 +161,7 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
                         if (!overScroller.isFinished) {
                             overScroller.abortAnimation()
                             // fling 先内部，给上面接管一部分
-                            startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
-                            dispatchNestedFling(0f,overScroller.currVelocity,false)
+                            continueExtraFling()
                         }
 
                     }
@@ -179,8 +177,7 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
                         if (!overScroller.isFinished) {
                             overScroller.abortAnimation()
                             // fling 先内部，给上面接管一部分
-                             startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
-                             dispatchNestedFling(0f,overScroller.currVelocity,false)
+                            continueExtraFling()
                         }
                     }
                 }
@@ -189,5 +186,10 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
 
         }
         super.computeScroll()
+    }
+
+    private fun continueExtraFling() {
+        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+        dispatchNestedFling(0f, overScroller.currVelocity, false)
     }
 }
