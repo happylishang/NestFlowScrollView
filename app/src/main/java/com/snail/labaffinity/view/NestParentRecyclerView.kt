@@ -1,10 +1,12 @@
 package com.snail.labaffinity.view
 
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.WebView
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +57,7 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
         offsetInWindow: IntArray?,
         type: Int
     ): Boolean {
+
         var consumedSelf = false
         // 先让父布局处理，还是后处理？
         val parentScrollConsumed = mParentScrollConsumed
@@ -113,6 +116,14 @@ class NestParentRecyclerView(context: Context, attributeSet: AttributeSet) :
     override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
         fling(velocityY)
         return true
+    }
+
+
+    //    如果内部是WebView可能触发滚动
+    override fun requestChildFocus(child: View?, focused: View?) {
+        if (child !is WebView) {
+            super.requestChildFocus(child, focused)
+        }
     }
     /**
      * =======================================================
